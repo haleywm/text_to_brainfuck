@@ -1,4 +1,4 @@
-use std::io::{Read, Write, BufWriter, Cursor};
+use std::io::{BufWriter, Cursor, Read, Write};
 
 //const IN_ERR: &str = "Error reading input";
 //const OUT_ERR: &str = "Error writing output";
@@ -15,8 +15,7 @@ pub fn parse(input: impl Read, output: impl Write, line_len: usize) {
 
         let (pos, dif) = if letter >= cur {
             (true, letter - cur)
-        }
-        else {
+        } else {
             (false, cur - letter)
         };
 
@@ -31,21 +30,17 @@ pub fn parse(input: impl Read, output: impl Write, line_len: usize) {
                 // No need to do extra syntax
                 if pos {
                     rem += b as i64;
-                }
-                else {
+                } else {
                     rem -= b as i64;
                 }
-            }
-            else if b == 1 {
+            } else if b == 1 {
                 // No need to do extra syntax
                 if pos {
                     rem += a as i64;
-                }
-                else {
+                } else {
                     rem -= a as i64;
                 }
-            }
-            else {
+            } else {
                 line_buf.write(b">").unwrap();
                 for _ in 0..a {
                     line_buf.write(b"+").unwrap();
@@ -54,8 +49,7 @@ pub fn parse(input: impl Read, output: impl Write, line_len: usize) {
                 for _ in 0..b {
                     if pos {
                         line_buf.write(b"+").unwrap();
-                    }
-                    else {
+                    } else {
                         line_buf.write(b"-").unwrap();
                     }
                 }
@@ -64,8 +58,7 @@ pub fn parse(input: impl Read, output: impl Write, line_len: usize) {
             for _ in 0..rem.abs() {
                 if rem >= 0 {
                     line_buf.write(b"+").unwrap();
-                }
-                else {
+                } else {
                     line_buf.write(b"-").unwrap();
                 }
             }
@@ -81,19 +74,17 @@ pub fn parse(input: impl Read, output: impl Write, line_len: usize) {
         if line_len == 0 {
             // Just write whole line
             out.write(&buf[..line_pos]).unwrap();
-        }
-        else {
+        } else {
             // Printing as chunks
             while cur_pos != line_pos {
                 // If there's not enough space on the line, just print that
                 let printed = if line_pos - cur_pos >= line_len - last_written {
                     let to_print = line_len - last_written;
-                    out.write(&buf[cur_pos..cur_pos+to_print]).unwrap();
+                    out.write(&buf[cur_pos..cur_pos + to_print]).unwrap();
                     out.write(b"\n").unwrap();
                     cur_pos += to_print;
                     to_print
-                }
-                else {
+                } else {
                     // Not enough space on the line, just printing what I can
                     let to_print = line_pos - cur_pos;
                     out.write(&buf[cur_pos..line_pos]).unwrap();
@@ -108,7 +99,6 @@ pub fn parse(input: impl Read, output: impl Write, line_len: usize) {
     out.write(b"\n").unwrap();
     out.flush().unwrap();
 }
-
 
 // Wanted to use primes, but nested loops with brainfuck are actually very difficult apparently, so doing something simpler
 // Any possible solution I can think of would be very unoptimized

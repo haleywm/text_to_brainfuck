@@ -1,5 +1,5 @@
-use std::io;
 use std::env;
+use std::io;
 use text_to_brainfuck::*;
 
 // Initial version
@@ -27,4 +27,3 @@ fn main() {
         Err(err) => eprintln!("{}", err),
     };
 }
-
